@@ -1,0 +1,4 @@
+interface:
+  display_name: "Common Paper"
+  short_description: "Query Common Paper agreements in Codex."
+  default_prompt: "Use $commonpaper to query or manage Common Paper agreements safely."
