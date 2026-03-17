@@ -1,33 +1,38 @@
-# Common Paper Codex Skill
+# Common Paper for Codex
 
-Codex version of the Common Paper contract skill, adapted from the open-source Claude Code skill at `CommonPaper/claude-skill`.
+[中文说明](./README.zh-CN.md)
 
-## What it does
+Codex-native Common Paper skill for querying agreements, tracking renewals, finding signers, and safely running contract actions with the Common Paper REST API.
+
+Adapted from the open-source Claude Code skill at [CommonPaper/claude-skill](https://github.com/CommonPaper/claude-skill), with workflow, installation, and credential handling rewritten for Codex.
+
+## Features
 
 - Query Common Paper agreements in natural language through Codex
 - Count, search, and summarize NDAs, CSAs, renewals, signers, and deal values
-- Perform Common Paper write actions after confirmation
+- Handle write operations with explicit confirmation gates
 - Store and validate the API token locally for Codex use
+- Use a bundled Python helper instead of ad hoc shell commands
 
-## Repo Layout
+## Structure
 
-- `commonpaper/`: installable Codex skill
-- `commonpaper/SKILL.md`: Codex-facing workflow and safety rules
-- `commonpaper/scripts/commonpaper_api.py`: token + API helper
-- `commonpaper/references/api-cheatsheet.md`: endpoint and filter quick reference
+- `commonpaper/` — installable Codex skill folder
+- `commonpaper/SKILL.md` — Codex workflow, safety rules, and usage guidance
+- `commonpaper/scripts/commonpaper_api.py` — token storage, validation, and API request helper
+- `commonpaper/references/api-cheatsheet.md` — endpoint, filter, and query quick reference
 
-## Install Locally
+## Install
 
 ```bash
 mkdir -p ~/.codex/skills
 rsync -a ./commonpaper/ ~/.codex/skills/commonpaper/
 ```
 
-Then use the skill in Codex with `$commonpaper`.
+Then invoke it in Codex with `$commonpaper`.
 
-## Token Setup
+## Set Up Credentials
 
-Run this in the installed skill directory:
+From the installed skill directory:
 
 ```bash
 python3 scripts/commonpaper_api.py save-token
@@ -36,6 +41,31 @@ python3 scripts/commonpaper_api.py validate-token
 
 The token is stored at `~/.codex/skills/commonpaper/cp-api-token` with user-only permissions.
 
-## Source
+## Example Commands
 
-This repository adapts the ideas and API coverage of [CommonPaper/claude-skill](https://github.com/CommonPaper/claude-skill) for the Codex skill format.
+Count signed agreements:
+
+```bash
+python3 scripts/commonpaper_api.py request GET /agreements \
+  --query 'filter[status_eq]=signed' \
+  --query 'page[size]=1'
+```
+
+Find contracts with a company:
+
+```bash
+python3 scripts/commonpaper_api.py request GET /agreements \
+  --query 'filter[recipient_organization_cont]=Acme' \
+  --query 'page[size]=25'
+```
+
+## Safety Notes
+
+- Never paste the API token into chat output
+- Prefer `save-token` over inline bearer tokens
+- Confirm all write actions before execution
+- Use JSON body files for `POST` and `PATCH` requests when possible
+
+## License
+
+MIT
