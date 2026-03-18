@@ -1,3 +1,7 @@
 .DS_Store
 __pycache__/
 *.pyc
+codex-paper/assets/webui/.nuxt/
+codex-paper/assets/webui/.output/
+codex-paper/assets/webui/node_modules/
+codex-paper/node_modules/

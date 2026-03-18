@@ -1,0 +1,4 @@
+interface:
+  display_name: "Codex Paper"
+  short_description: "Study research papers with Codex."
+  default_prompt: "Use $codex-paper to study a research paper PDF and generate learning materials."
